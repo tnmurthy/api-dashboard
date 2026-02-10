@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Command Center</title>
+    <meta name="description" content="Revolutionary AI infrastructure management">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Hero Landing -->
+    <section class="hero" id="hero">
+        <div class="spotlight" id="spotlight"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="typewriter" id="typewriter">Your AI. Your Rules.</span>
+            </h1>
+            <p class="hero-subtitle">Command Center</p>
+            <button class="hero-cta" id="enter-btn">
+                <span>Enter</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+    </section>
+
+    <!-- Main App -->
+    <div class="app" id="app">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <div class="nav-logo">
+                <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                    <rect width="32" height="32" rx="8" fill="url(#logo-gradient)" />
+                    <path d="M16 8L22 12V20L16 24L10 20V12L16 8Z" stroke="white" stroke-width="2"
+                        stroke-linejoin="round" />
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0" y1="0" x2="32" y2="32">
+                            <stop offset="0%" stop-color="#667eea" />
+                            <stop offset="100%" stop-color="#764ba2" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>API Command Center</span>
+            </div>
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-view="dashboard">Dashboard</button>
+                <button class="nav-tab" data-view="config">Configure</button>
+            </div>
+        </nav>
+
+        <!-- Dashboard View - Single Screen -->
+        <div class="view active" id="view-dashboard">
+            <div class="dashboard-grid">
+                <!-- Left: Stats -->
+                <div class="stats-section">
+                    <div class="stat-card">
+                        <div class="stat-label">API Calls</div>
+                        <div class="stat-value" id="total-calls">0</div>
+                        <div class="stat-trend positive" id="calls-trend">+0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Tokens</div>
+                        <div class="stat-value" id="tokens-used">0</div>
+                        <div class="stat-subtitle" id="tokens-available">of 0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Cost</div>
+                        <div class="stat-value">$<span id="total-cost">0.00</span></div>
+                        <div class="stat-subtitle">This month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Success Rate</div>
+                        <div class="stat-value" id="success-rate">0%</div>
+                        <div class="stat-subtitle" id="uptime">0% uptime</div>
+                    </div>
+                </div>
+
+                <!-- Terminal Section -->
+                <div class="terminal-section">
+                    <div class="terminal-header">
+                        <span class="terminal-title">$ Terminal</span>
+                        <button class="terminal-btn" id="clear-terminal">Clear</button>
+                    </div>
+                    <div class="terminal-output" id="terminal-output">
+                        <div class="terminal-line welcome">Welcome to API Command Center</div>
+                        <div class="terminal-line muted">Type 'help' for commands</div>
+                        <div class="terminal-line muted">─────────────────────────────────</div>
+                    </div>
+                    <div class="terminal-input-line">
+                        <span class="terminal-prompt">$</span>
+                        <input type="text" class="terminal-input" id="terminal-input" placeholder="Enter command..."
+                            autocomplete="off">
+                    </div>
+                </div>
+
+                <!-- Activity Log Section (OpenRouter-inspired) -->
+                <div class="activity-section">
+                    <div class="activity-header">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-actions">
+                            <button class="btn-secondary btn-sm" id="export-activity">
+                                <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+                                    <path
+                                        d="M17.5 12.5V15.8333C17.5 16.2754 17.3244 16.6993 17.0118 17.0118C16.6993 17.3244 16.2754 17.5 15.8333 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V12.5M14.1667 6.66667L10 2.5M10 2.5L5.83333 6.66667M10 2.5V12.5"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                                Export CSV
+                            </button>
+                        </div>
+                    </div>
+                    <div class="activity-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="usage-progress" style="width: 65%"></div>
+                        </div>
+                        <span class="progress-label" id="usage-label">65% Used</span>
+                    </div>
+                    <div class="activity-log" id="activity-log">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Config View - Single Screen -->
+        <div class="view" id="view-config">
+            <!-- API Settings Section -->
+            <div class="api-settings">
+                <div class="settings-header">
+                    <h2>API Settings</h2>
+                    <p>Configure your credentials to fetch real-time quota and usage data</p>
+                </div>
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <label for="user-email">Email Address</label>
+                        <input type="email" id="user-email" placeholder="your.email@example.com" autocomplete="email">
+                    </div>
+                    <div class="settings-card">
+                        <label for="api-key">API Key</label>
+                        <div class="api-key-input">
+                            <input type="password" id="api-key" placeholder="sk-..." autocomplete="off">
+                            <button class="toggle-visibility" id="toggle-key" title="Show/Hide">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor"
+                                        stroke-width="2" />
+                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="settings-card">
+                        <label for="provider-select">Provider</label>
+                        <select id="provider-select">
+                            <optgroup label="Traditional APIs">
+                                <option value="openai">OpenAI</option>
+                                <option value="anthropic">Anthropic</option>
+                                <option value="google">Google AI</option>
+                                <option value="azure">Azure OpenAI</option>
+                            </optgroup>
+                            <optgroup label="MCP Providers">
+                                <option value="mcp-supabase">Supabase MCP Server</option>
+                                <option value="mcp-custom">Custom MCP Server</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="settings-actions">
+                        <button class="btn-primary" id="fetch-quota">
+                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                                <path
+                                    d="M17.5 8.33333V4.16667C17.5 3.72464 17.3244 3.30072 17.0118 2.98816C16.6993 2.67559 16.2754 2.5 15.8333 2.5H4.16667C3.72464 2.5 3.30072 2.67559 2.98816 2.98816C2.67559 3.30072 2.5 3.72464 2.5 4.16667V8.33333M17.5 8.33333L10 12.5L2.5 8.33333M17.5 8.33333V15.8333C17.5 16.2754 17.3244 16.6993 17.0118 17.0118C16.6993 17.3244 16.2754 17.5 15.8333 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V8.33333"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            Fetch Quota
+                        </button>
+                        <button class="btn-secondary" id="save-settings">Save Settings</button>
+                    </div>
+                </div>
+                <div class="quota-display" id="quota-display" style="display: none;">
+                    <div class="quota-item">
+                        <span class="quota-label">Total Quota:</span>
+                        <span class="quota-value" id="quota-total">-</span>
+                    </div>
+                    <div class="quota-item">
+                        <span class="quota-label">Used:</span>
+                        <span class="quota-value" id="quota-used">-</span>
+                    </div>
+                    <div class="quota-item">
+                        <span class="quota-label">Remaining:</span>
+                        <span class="quota-value success" id="quota-remaining">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-grid">
+                <div class="config-apps" id="config-apps">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="config-footer">
+                <button class="btn-secondary" id="export-config">
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                        <path
+                            d="M17.5 12.5V15.8333C17.5 16.2754 17.3244 16.6993 17.0118 17.0118C16.6993 17.3244 16.2754 17.5 15.8333 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V12.5M14.1667 6.66667L10 2.5M10 2.5L5.83333 6.66667M10 2.5V12.5"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Export All
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

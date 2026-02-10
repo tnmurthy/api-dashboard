@@ -1,0 +1,235 @@
+╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                    API COMMAND CENTER                                            ║
+║                                   SCREEN WIREFRAMES                                              ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ SCREEN 1: DASHBOARD VIEW                                                                        ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+│  ◆ API Command Center                           [ Dashboard ]  [ Configure ]                   │
+└────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────┬──────────────────────────────────────────────────────────────────┐
+│                             │                                                                  │
+│  ┌─────────────────────┐    │  ┌────────────────────────────────────────────────────────────┐ │
+│  │   API CALLS         │    │  │  $ Terminal                                      [ Clear ]  │ │
+│  │                     │    │  ├────────────────────────────────────────────────────────────┤ │
+│  │      12,547         │    │  │                                                            │ │
+│  │                     │    │  │  Welcome to API Command Center                             │ │
+│  │   +24% ↑            │    │  │  Type 'help' for commands                                  │ │
+│  └─────────────────────┘    │  │  ─────────────────────────────────                         │ │
+│                             │  │                                                            │ │
+│  ┌─────────────────────┐    │  │  $ list models                                             │ │
+│  │   TOKENS            │    │  │  Models:                                                   │ │
+│  │                     │    │  │    • gpt-4-turbo        $0.0100/1k                         │ │
+│  │     678,432         │    │  │    • gpt-3.5-turbo      $0.0015/1k                         │ │
+│  │                     │    │  │    • claude-3-opus      $0.0150/1k                         │ │
+│  │  of 1,000,000       │    │  │    • claude-3-sonnet    $0.0030/1k                         │ │
+│  └─────────────────────┘    │  │    • gemini-pro         $0.0005/1k                         │ │
+│                             │  │    • gemini-ultra       $0.0020/1k                         │ │
+│  ┌─────────────────────┐    │  │  ─────────────────────────────────                         │ │
+│  │   COST              │    │  │                                                            │ │
+│  │                     │    │  │  $ show config openclaw                                    │ │
+│  │     $24.56          │    │  │  OpenClaw:                                                 │ │
+│  │                     │    │  │    Primary:  gpt-4-turbo                                   │ │
+│  │  This month         │    │  │    Fallback: claude-3-sonnet                               │ │
+│  └─────────────────────┘    │  │  ─────────────────────────────────                         │ │
+│                             │  │                                                            │ │
+│  ┌─────────────────────┐    │  │                                                            │ │
+│  │   SUCCESS RATE      │    │  │                                                            │ │
+│  │                     │    │  │                                                            │ │
+│  │      99.8%          │    │  │                                                            │ │
+│  │                     │    │  ├────────────────────────────────────────────────────────────┤ │
+│  │  99.9% uptime       │    │  │  $ ▊                                                       │ │
+│  └─────────────────────┘    │  └────────────────────────────────────────────────────────────┘ │
+│                             │                                                                  │
+└─────────────────────────────┴──────────────────────────────────────────────────────────────────┘
+
+    ◄─── Stats Grid ───►         ◄────────────── Terminal Interface ──────────────►
+
+
+LAYOUT BREAKDOWN:
+═══════════════════
+
+┌─ Left Column (400px) ─────────────────┐    ┌─ Right Column (Flexible) ────────────────┐
+│                                       │    │                                          │
+│  4 Stat Cards (Stacked Vertically):  │    │  Terminal with CRT Green Glow:           │
+│  ┌─────────────────────────────────┐ │    │  ┌────────────────────────────────────┐ │
+│  │ 1. API Calls (with trend)       │ │    │  │ Header: Title + Clear button       │ │
+│  ├─────────────────────────────────┤ │    │  ├────────────────────────────────────┤ │
+│  │ 2. Tokens (used/available)      │ │    │  │ Body: Scrollable output            │ │
+│  ├─────────────────────────────────┤ │    │  │  - Command history                 │ │
+│  │ 3. Cost (monthly spend)         │ │    │  │  - Success/Error messages          │ │
+│  ├─────────────────────────────────┤ │    │  │  - Syntax highlighting             │ │
+│  │ 4. Success Rate (with uptime)   │ │    │  ├────────────────────────────────────┤ │
+│  └─────────────────────────────────┘ │    │  │ Input: $ prompt + command field    │ │
+│                                       │    │  └────────────────────────────────────┘ │
+└───────────────────────────────────────┘    └──────────────────────────────────────────┘
+
+KEY FEATURES:
+• No scrolling - fits in single viewport (100vh - 70px nav)
+• Stats animate on load (counter effect)
+• Terminal auto-scrolls to latest output
+• Green CRT glow effect on terminal text
+• Gradient backgrounds on stat values
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ SCREEN 2: CONFIGURATION VIEW                                                                    ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+│  ◆ API Command Center                           [ Dashboard ]  [ Configure ]                   │
+└────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                                │
+│  ┌──────────────────────────────────────────┐  ┌──────────────────────────────────────────┐  │
+│  │  ┌────┐  OpenClaw                        │  │  ┌────┐  MoltBot                         │  │
+│  │  │ OC │  AI-powered code assistant       │  │  │ MB │  Conversational AI assistant     │  │
+│  │  └────┘                                  │  │  └────┘                                  │  │
+│  │                                          │  │                                          │  │
+│  │  PRIMARY MODEL                           │  │  PRIMARY MODEL                           │  │
+│  │  ┌────────────────────────────────────┐  │  │  ┌────────────────────────────────────┐  │  │
+│  │  │ GPT-4 Turbo ($0.01/1k)        ▼   │  │  │  │ Gemini Pro ($0.0005/1k)       ▼   │  │  │
+│  │  └────────────────────────────────────┘  │  │  └────────────────────────────────────┘  │  │
+│  │                                          │  │                                          │  │
+│  │  FALLBACK MODEL                          │  │  FALLBACK MODEL                          │  │
+│  │  ┌────────────────────────────────────┐  │  │  ┌────────────────────────────────────┐  │  │
+│  │  │ Claude 3 Sonnet ($0.003/1k)   ▼   │  │  │  │ GPT-3.5 Turbo ($0.0015/1k)    ▼   │  │  │
+│  │  └────────────────────────────────────┘  │  │  └────────────────────────────────────┘  │  │
+│  │                                          │  │                                          │  │
+│  │  ┌────────────────────────────────────┐  │  │  ┌────────────────────────────────────┐  │  │
+│  │  │ $ config openclaw --primary gpt... │  │  │  │ $ config moltbot --primary gem...  │  │  │
+│  │  └────────────────────────────────────┘  │  │  └────────────────────────────────────┘  │  │
+│  │                                          │  │                                          │  │
+│  │  [ Copy Command ]      [ Apply ]        │  │  [ Copy Command ]      [ Apply ]        │  │
+│  └──────────────────────────────────────────┘  └──────────────────────────────────────────┘  │
+│                                                                                                │
+└────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                    [ Export All Configurations ]
+
+
+LAYOUT BREAKDOWN:
+═══════════════════
+
+┌─ App Card 1 (OpenClaw) ───────────────┐    ┌─ App Card 2 (MoltBot) ────────────────┐
+│                                       │    │                                       │
+│  ┌─ Header ─────────────────────────┐ │    │  ┌─ Header ─────────────────────────┐ │
+│  │  [Icon] App Name                 │ │    │  │  [Icon] App Name                 │ │
+│  │         Description              │ │    │  │         Description              │ │
+│  └──────────────────────────────────┘ │    │  └──────────────────────────────────┘ │
+│                                       │    │                                       │
+│  ┌─ Model Selectors ────────────────┐ │    │  ┌─ Model Selectors ────────────────┐ │
+│  │  Primary Model [Dropdown]        │ │    │  │  Primary Model [Dropdown]        │ │
+│  │  Fallback Model [Dropdown]       │ │    │  │  Fallback Model [Dropdown]       │ │
+│  └──────────────────────────────────┘ │    │  └──────────────────────────────────┘ │
+│                                       │    │                                       │
+│  ┌─ Command Preview ────────────────┐ │    │  ┌─ Command Preview ────────────────┐ │
+│  │  $ config openclaw --primary...  │ │    │  │  $ config moltbot --primary...   │ │
+│  └──────────────────────────────────┘ │    │  └──────────────────────────────────┘ │
+│                                       │    │                                       │
+│  [Copy Button]  [Apply Button]       │    │  [Copy Button]  [Apply Button]       │
+└───────────────────────────────────────┘    └───────────────────────────────────────┘
+
+KEY FEATURES:
+• Cards auto-fit in grid (responsive)
+• Dropdowns show model name + pricing
+• Command preview updates live on selection change
+• Copy button copies command to clipboard
+• Apply button executes config command
+• Export All button downloads JSON with all configs
+
+
+╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                  RESPONSIVE BREAKPOINTS                                          ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+DESKTOP (1200px+):
+┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
+│  Dashboard: [Stats Grid 400px] [Terminal Flex]                                                 │
+│  Config:    [Card 1] [Card 2] (side by side)                                                   │
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+LAPTOP (768px - 1200px):
+┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
+│  Dashboard: [Stats Grid 2x2]                                                                   │
+│             [Terminal Full Width]                                                              │
+│  Config:    [Card 1] [Card 2] (side by side, narrower)                                        │
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+MOBILE (<768px):
+┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
+│  Dashboard: [Stat 1] [Stat 2]                                                                  │
+│             [Stat 3] [Stat 4]                                                                  │
+│             [Terminal Full Width]                                                              │
+│  Config:    [Card 1]                                                                           │
+│             [Card 2]                                                                           │
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                    DESIGN SPECIFICATIONS                                         ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+COLORS:
+  Background:        #000000 (Pure Black)
+  Cards:             rgba(255, 255, 255, 0.03)
+  Borders:           rgba(255, 255, 255, 0.1)
+  Text Primary:      #ffffff
+  Text Secondary:    #a0a0a0
+  Text Muted:        #666666
+  Accent Gradient:   #667eea → #764ba2
+  Terminal Green:    #00ff00
+  Success Green:     #00ff88
+
+TYPOGRAPHY:
+  Headlines:         96px Inter Black
+  Card Titles:       40px Inter Bold
+  Body Text:         16px Inter Regular
+  Terminal:          14px Fira Code
+
+SPACING:
+  Nav Height:        70px
+  Card Padding:      24px
+  Grid Gap:          24px
+  Button Padding:    12px 24px
+
+EFFECTS:
+  Spotlight:         800px radial gradient, follows cursor
+  Terminal Glow:     0 0 40px rgba(0, 255, 0, 0.2)
+  Card Hover:        translateY(-2px) + border glow
+  Button Hover:      translateY(-4px) + shadow
+
+
+╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                    INTERACTION FLOWS                                             ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+FLOW 1: Configure via Terminal
+  1. User clicks Dashboard tab
+  2. User types: config openclaw --primary gpt-4-turbo --fallback claude-3-sonnet
+  3. Terminal shows: ✓ OpenClaw configured
+  4. Config view updates automatically
+
+FLOW 2: Configure via Visual UI
+  1. User clicks Configure tab
+  2. User selects model from dropdown
+  3. Command preview updates in real-time
+  4. User clicks Apply
+  5. Button shows: ✓ Applied (2 seconds)
+  6. Config saved to LocalStorage
+
+FLOW 3: Export Configuration
+  1. User types: export openclaw (in terminal)
+     OR clicks "Export All" button (in config view)
+  2. JSON file downloads automatically
+  3. Terminal/Button shows confirmation
+
+
+═══════════════════════════════════════════════════════════════════════════════════════════════════
+                                    END OF WIREFRAMES
+═══════════════════════════════════════════════════════════════════════════════════════════════════
