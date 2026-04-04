@@ -816,7 +816,7 @@ class AppController {
 
         document.getElementById('crm-total-contacts').textContent = total;
         document.getElementById('crm-active-leads').textContent = leads;
-        document.getElementById('crm-leads-trend').textContent = `+${leads}`;
+        document.getElementById('crm-leads-trend').textContent = `${leads} active`;
         document.getElementById('crm-conversion').textContent = `${conversion}%`;
         document.getElementById('crm-pipeline').textContent = pipeline.toLocaleString();
     }
@@ -940,7 +940,7 @@ class AppController {
         document.getElementById('wallet-balance-tokens').textContent = `${this.formatNumber(wallet.tokensRemaining)} tokens remaining`;
         document.getElementById('wallet-monthly-spend').textContent = wallet.monthlySpend.toFixed(2);
         document.getElementById('wallet-total-spent').textContent = wallet.totalSpent.toFixed(2);
-        document.getElementById('wallet-avg-cost').textContent = wallet.avgCostPerCall.toFixed(4);
+        document.getElementById('wallet-avg-cost').textContent = wallet.avgCostPerCall.toFixed(3);
         document.getElementById('wallet-autorefill').checked = wallet.autoRefill || false;
 
         this.loadTransactions();
@@ -953,7 +953,6 @@ class AppController {
 
         wallet.balance = parseFloat((wallet.balance + amount).toFixed(2));
         wallet.tokensRemaining += tokens;
-        wallet.totalSpent = parseFloat((wallet.totalSpent + amount).toFixed(2));
         this.storage.saveWallet(wallet);
 
         const tx = {
