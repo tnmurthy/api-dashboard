@@ -10,7 +10,10 @@ class StorageService {
             STATS: 'api_command_stats',
             SETTINGS: 'api_command_settings',
             QUOTA: 'api_command_quota',
-            ACTIVITY: 'api_command_activity'
+            ACTIVITY: 'api_command_activity',
+            CONTACTS: 'api_command_contacts',
+            WALLET: 'api_command_wallet',
+            TRANSACTIONS: 'api_command_transactions'
         };
         this.initializeStorage();
     }
@@ -27,6 +30,15 @@ class StorageService {
         }
         if (!localStorage.getItem(this.STORAGE_KEYS.ACTIVITY)) {
             this.saveActivity(this.getMockActivity());
+        }
+        if (!localStorage.getItem(this.STORAGE_KEYS.CONTACTS)) {
+            this.saveContacts(this.getMockContacts());
+        }
+        if (!localStorage.getItem(this.STORAGE_KEYS.WALLET)) {
+            this.saveWallet(this.getMockWallet());
+        }
+        if (!localStorage.getItem(this.STORAGE_KEYS.TRANSACTIONS)) {
+            this.saveTransactions(this.getMockTransactions());
         }
     }
 
@@ -80,6 +92,65 @@ class StorageService {
             successRate: 99.8,
             uptime: 99.9
         };
+    }
+
+    getMockContacts() {
+        return [
+            { id: 'c1', name: 'Alice Johnson', company: 'TechCorp', email: 'alice@techcorp.io', status: 'customer', value: 12000, createdAt: new Date(Date.now() - 30 * 86400000).toISOString() },
+            { id: 'c2', name: 'Bob Martinez', company: 'StartupXYZ', email: 'bob@startupxyz.com', status: 'prospect', value: 5000, createdAt: new Date(Date.now() - 14 * 86400000).toISOString() },
+            { id: 'c3', name: 'Carol Lee', company: 'Innovate Ltd', email: 'carol@innovate.dev', status: 'lead', value: 2500, createdAt: new Date(Date.now() - 7 * 86400000).toISOString() },
+            { id: 'c4', name: 'David Kim', company: 'FinTech Inc', email: 'david@fintech.io', status: 'customer', value: 20000, createdAt: new Date(Date.now() - 60 * 86400000).toISOString() },
+            { id: 'c5', name: 'Eva Patel', company: 'DataStream', email: 'eva@datastream.ai', status: 'prospect', value: 8000, createdAt: new Date(Date.now() - 3 * 86400000).toISOString() },
+            { id: 'c6', name: 'Frank Müller', company: 'EuroAI GmbH', email: 'frank@euroai.de', status: 'lead', value: 3000, createdAt: new Date(Date.now() - 1 * 86400000).toISOString() },
+            { id: 'c7', name: 'Grace Chen', company: 'CloudBase', email: 'grace@cloudbase.net', status: 'churned', value: 4500, createdAt: new Date(Date.now() - 90 * 86400000).toISOString() }
+        ];
+    }
+
+    getMockWallet() {
+        return { balance: 42.50, monthlySpend: 24.56, totalSpent: 187.32, avgCostPerCall: 0.00196, autoRefill: false, tokensRemaining: 4250000 };
+    }
+
+    getMockTransactions() {
+        const now = Date.now();
+        return [
+            { id: 't1', date: new Date(now - 1 * 86400000).toISOString(), description: 'API Usage - GPT-4 Turbo', tokens: -85420, amount: -0.854, type: 'debit' },
+            { id: 't2', date: new Date(now - 2 * 86400000).toISOString(), description: 'Credits Added', tokens: 2500000, amount: 25.00, type: 'credit' },
+            { id: 't3', date: new Date(now - 3 * 86400000).toISOString(), description: 'API Usage - Claude 3 Sonnet', tokens: -42100, amount: -0.126, type: 'debit' },
+            { id: 't4', date: new Date(now - 5 * 86400000).toISOString(), description: 'API Usage - Gemini Pro', tokens: -310000, amount: -0.155, type: 'debit' },
+            { id: 't5', date: new Date(now - 7 * 86400000).toISOString(), description: 'Credits Added', tokens: 1000000, amount: 10.00, type: 'credit' },
+            { id: 't6', date: new Date(now - 10 * 86400000).toISOString(), description: 'API Usage - GPT-4 Turbo', tokens: -120000, amount: -1.20, type: 'debit' },
+            { id: 't7', date: new Date(now - 15 * 86400000).toISOString(), description: 'Credits Added', tokens: 5000000, amount: 50.00, type: 'credit' }
+        ];
+    }
+
+    getContacts() {
+        return JSON.parse(localStorage.getItem(this.STORAGE_KEYS.CONTACTS) || '[]');
+    }
+
+    saveContacts(contacts) {
+        localStorage.setItem(this.STORAGE_KEYS.CONTACTS, JSON.stringify(contacts));
+    }
+
+    getWallet() {
+        return JSON.parse(localStorage.getItem(this.STORAGE_KEYS.WALLET) || '{}');
+    }
+
+    saveWallet(wallet) {
+        localStorage.setItem(this.STORAGE_KEYS.WALLET, JSON.stringify(wallet));
+    }
+
+    getTransactions() {
+        return JSON.parse(localStorage.getItem(this.STORAGE_KEYS.TRANSACTIONS) || '[]');
+    }
+
+    saveTransactions(transactions) {
+        localStorage.setItem(this.STORAGE_KEYS.TRANSACTIONS, JSON.stringify(transactions));
+    }
+
+    addTransaction(tx) {
+        const transactions = this.getTransactions();
+        transactions.unshift(tx);
+        this.saveTransactions(transactions.slice(0, 200));
     }
 
     getApps() {
@@ -278,6 +349,8 @@ class AppController {
         this.setupConfiguration();
         this.setupSettings();
         this.setupActivityLog();
+        this.setupCRM();
+        this.setupWallet();
         this.loadDashboardData();
     }
 
@@ -708,6 +781,246 @@ class AppController {
 
     formatNumber(num) {
         return num.toLocaleString();
+    }
+
+    // ============================================
+    // CRM
+    // ============================================
+
+    setupCRM() {
+        this.crmFilter = 'all';
+        this.loadCRMStats();
+        this.loadCRMContacts();
+
+        document.getElementById('crm-add-contact').addEventListener('click', () => {
+            this.addContact();
+        });
+
+        document.querySelectorAll('.crm-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.crm-filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.crmFilter = btn.dataset.filter;
+                this.loadCRMContacts();
+            });
+        });
+    }
+
+    loadCRMStats() {
+        const contacts = this.storage.getContacts();
+        const leads = contacts.filter(c => c.status === 'lead').length;
+        const customers = contacts.filter(c => c.status === 'customer').length;
+        const total = contacts.length;
+        const pipeline = contacts.filter(c => c.status !== 'churned').reduce((sum, c) => sum + (c.value || 0), 0);
+        const conversion = total > 0 ? ((customers / total) * 100).toFixed(1) : '0.0';
+
+        document.getElementById('crm-total-contacts').textContent = total;
+        document.getElementById('crm-active-leads').textContent = leads;
+        document.getElementById('crm-leads-trend').textContent = `+${leads}`;
+        document.getElementById('crm-conversion').textContent = `${conversion}%`;
+        document.getElementById('crm-pipeline').textContent = pipeline.toLocaleString();
+    }
+
+    loadCRMContacts() {
+        const contacts = this.storage.getContacts();
+        const filtered = this.crmFilter === 'all' ? contacts : contacts.filter(c => c.status === this.crmFilter);
+        const tbody = document.getElementById('crm-contacts-tbody');
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem;">No contacts found</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(c => `
+            <tr>
+                <td><strong>${this.escapeHtml(c.name)}</strong></td>
+                <td style="color:var(--text-secondary)">${this.escapeHtml(c.company)}</td>
+                <td class="contact-email">${this.escapeHtml(c.email)}</td>
+                <td><span class="contact-status-badge ${c.status}">${c.status}</span></td>
+                <td class="contact-value">$${(c.value || 0).toLocaleString()}</td>
+                <td><button class="crm-delete-btn" onclick="app.deleteContact('${c.id}')">Remove</button></td>
+            </tr>
+        `).join('');
+    }
+
+    addContact() {
+        const name = document.getElementById('crm-name').value.trim();
+        const company = document.getElementById('crm-company').value.trim();
+        const email = document.getElementById('crm-email').value.trim();
+        const status = document.getElementById('crm-status').value;
+        const value = parseFloat(document.getElementById('crm-value').value) || 0;
+
+        if (!name || !email) {
+            alert('Name and email are required.');
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        const contact = {
+            id: 'c' + Date.now(),
+            name,
+            company,
+            email,
+            status,
+            value,
+            createdAt: new Date().toISOString()
+        };
+
+        const contacts = this.storage.getContacts();
+        contacts.unshift(contact);
+        this.storage.saveContacts(contacts);
+
+        document.getElementById('crm-name').value = '';
+        document.getElementById('crm-company').value = '';
+        document.getElementById('crm-email').value = '';
+        document.getElementById('crm-value').value = '';
+
+        this.loadCRMStats();
+        this.loadCRMContacts();
+    }
+
+    deleteContact(id) {
+        const contacts = this.storage.getContacts().filter(c => c.id !== id);
+        this.storage.saveContacts(contacts);
+        this.loadCRMStats();
+        this.loadCRMContacts();
+    }
+
+    escapeHtml(str) {
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // ============================================
+    // WALLET
+    // ============================================
+
+    setupWallet() {
+        this.selectedTopupAmount = null;
+        this.loadWalletData();
+
+        document.querySelectorAll('.topup-package').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.topup-package').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                this.selectedTopupAmount = parseFloat(btn.dataset.amount);
+                document.getElementById('wallet-custom-amount').value = this.selectedTopupAmount;
+            });
+        });
+
+        document.getElementById('wallet-topup-btn').addEventListener('click', () => {
+            const input = document.getElementById('wallet-custom-amount');
+            const amount = parseFloat(input.value);
+            if (!amount || amount <= 0 || amount > 10000) {
+                alert('Please enter a valid amount between $1 and $10,000.');
+                return;
+            }
+            this.processTopup(amount);
+        });
+
+        document.getElementById('wallet-autorefill').addEventListener('change', (e) => {
+            const wallet = this.storage.getWallet();
+            wallet.autoRefill = e.target.checked;
+            this.storage.saveWallet(wallet);
+        });
+
+        document.getElementById('export-transactions').addEventListener('click', () => {
+            this.exportTransactionsCSV();
+        });
+    }
+
+    loadWalletData() {
+        const wallet = this.storage.getWallet();
+
+        document.getElementById('wallet-balance').textContent = wallet.balance.toFixed(2);
+        document.getElementById('wallet-balance-tokens').textContent = `${this.formatNumber(wallet.tokensRemaining)} tokens remaining`;
+        document.getElementById('wallet-monthly-spend').textContent = wallet.monthlySpend.toFixed(2);
+        document.getElementById('wallet-total-spent').textContent = wallet.totalSpent.toFixed(2);
+        document.getElementById('wallet-avg-cost').textContent = wallet.avgCostPerCall.toFixed(4);
+        document.getElementById('wallet-autorefill').checked = wallet.autoRefill || false;
+
+        this.loadTransactions();
+    }
+
+    processTopup(amount) {
+        const tokensPerDollar = 100000;
+        const tokens = Math.round(amount * tokensPerDollar);
+        const wallet = this.storage.getWallet();
+
+        wallet.balance = parseFloat((wallet.balance + amount).toFixed(2));
+        wallet.tokensRemaining += tokens;
+        wallet.totalSpent = parseFloat((wallet.totalSpent + amount).toFixed(2));
+        this.storage.saveWallet(wallet);
+
+        const tx = {
+            id: 'tx' + Date.now(),
+            date: new Date().toISOString(),
+            description: 'Credits Added',
+            tokens,
+            amount,
+            type: 'credit'
+        };
+        this.storage.addTransaction(tx);
+
+        document.getElementById('wallet-custom-amount').value = '';
+        document.querySelectorAll('.topup-package').forEach(b => b.classList.remove('selected'));
+        this.selectedTopupAmount = null;
+
+        this.loadWalletData();
+
+        const btn = document.getElementById('wallet-topup-btn');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '✓ Added!';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+    }
+
+    loadTransactions() {
+        const transactions = this.storage.getTransactions();
+        const container = document.getElementById('wallet-tx-list');
+
+        if (transactions.length === 0) {
+            container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:2rem;">No transactions yet</div>';
+            return;
+        }
+
+        container.innerHTML = transactions.map(tx => {
+            const date = new Date(tx.date);
+            const dateStr = date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' });
+            const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+            const sign = tx.type === 'credit' ? '+' : '-';
+            const absAmount = Math.abs(tx.amount).toFixed(3);
+            const tokensStr = tx.type === 'credit'
+                ? `+${this.formatNumber(tx.tokens)}`
+                : `${this.formatNumber(tx.tokens)}`;
+
+            return `
+                <div class="wallet-tx-item">
+                    <div class="wallet-tx-date">${dateStr} ${timeStr}</div>
+                    <div class="wallet-tx-desc">${this.escapeHtml(tx.description)}</div>
+                    <div class="wallet-tx-tokens">${tokensStr} tkns</div>
+                    <div class="wallet-tx-amount ${tx.type}">${sign}$${absAmount}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    exportTransactionsCSV() {
+        const transactions = this.storage.getTransactions();
+        const headers = ['Date', 'Description', 'Tokens', 'Amount', 'Type'];
+        const rows = transactions.map(tx => [tx.date, `"${tx.description}"`, tx.tokens, tx.amount, tx.type]);
+
+        const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `wallet-transactions-${new Date().toISOString().split('T')[0]}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
     }
 }
 

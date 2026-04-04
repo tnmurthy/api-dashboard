@@ -861,6 +861,592 @@ body {
     }
 }
 
+/* ============================================
+   CRM VIEW
+   ============================================ */
+
+.crm-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 70px);
+    padding: 1.5rem;
+    gap: 1.5rem;
+    overflow-y: auto;
+}
+
+.crm-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+.crm-main {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 1.5rem;
+    flex: 1;
+    min-height: 0;
+}
+
+.crm-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Add Contact Form */
+.crm-add-section {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    height: fit-content;
+}
+
+.crm-add-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.crm-add-form input,
+.crm-add-form select {
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: var(--font-display);
+    transition: all 0.2s;
+}
+
+.crm-add-form input:focus,
+.crm-add-form select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.crm-add-form input::placeholder {
+    color: var(--text-muted);
+}
+
+.crm-add-form select option {
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+.crm-add-btn {
+    flex: unset !important;
+    width: 100%;
+    margin-top: 0.25rem;
+}
+
+/* Contact List */
+.crm-list-section {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.crm-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+}
+
+.crm-list-header .crm-section-title {
+    margin-bottom: 0;
+}
+
+.crm-filters {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.crm-filter-btn {
+    padding: 0.375rem 0.875rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.crm-filter-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.crm-filter-btn.active {
+    background: var(--gradient-primary);
+    border-color: transparent;
+    color: white;
+}
+
+.crm-table-wrapper {
+    overflow-y: auto;
+    flex: 1;
+}
+
+.crm-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.crm-table thead th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    background: rgba(10, 10, 10, 0.9);
+    backdrop-filter: blur(8px);
+}
+
+.crm-table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.15s;
+}
+
+.crm-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.crm-table tbody td {
+    padding: 0.875rem 1rem;
+    color: var(--text-primary);
+    vertical-align: middle;
+}
+
+.crm-table td.contact-email {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.crm-table td.contact-value {
+    color: var(--accent-success);
+    font-weight: 600;
+    font-family: var(--font-mono);
+}
+
+.contact-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.contact-status-badge.lead {
+    background: rgba(102, 126, 234, 0.15);
+    color: var(--accent-primary);
+}
+
+.contact-status-badge.prospect {
+    background: rgba(255, 180, 0, 0.15);
+    color: #ffb400;
+}
+
+.contact-status-badge.customer {
+    background: rgba(0, 255, 136, 0.15);
+    color: var(--accent-success);
+}
+
+.contact-status-badge.churned {
+    background: rgba(255, 68, 68, 0.15);
+    color: #ff4444;
+}
+
+.crm-delete-btn {
+    padding: 0.35rem 0.75rem;
+    background: transparent;
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: 6px;
+    color: #ff4444;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.crm-delete-btn:hover {
+    background: rgba(255, 68, 68, 0.1);
+    border-color: #ff4444;
+}
+
+/* ============================================
+   WALLET VIEW
+   ============================================ */
+
+.wallet-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 70px);
+    padding: 1.5rem;
+    gap: 1.5rem;
+    overflow-y: auto;
+}
+
+.wallet-stats {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+.wallet-balance-card {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+    border: 1px solid rgba(102, 126, 234, 0.4);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.wallet-balance-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.wallet-balance-amount {
+    font-size: 3rem;
+    font-weight: 900;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+}
+
+.wallet-balance-sub {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.wallet-main {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 1.5rem;
+    flex: 1;
+    min-height: 0;
+}
+
+.wallet-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Top-up Section */
+.wallet-topup-section {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    height: fit-content;
+}
+
+.wallet-topup-packages {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.topup-package {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    gap: 0.25rem;
+}
+
+.topup-package:hover {
+    background: rgba(102, 126, 234, 0.1);
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+}
+
+.topup-package.selected {
+    background: rgba(102, 126, 234, 0.15);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 1px var(--accent-primary);
+}
+
+.topup-amount {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.topup-tokens {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.topup-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    padding: 0.2rem 0.6rem;
+    background: var(--gradient-primary);
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.topup-badge.best {
+    background: linear-gradient(135deg, #00ff88, #00b894);
+    color: #000;
+}
+
+.wallet-custom-topup {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.wallet-custom-topup input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: var(--font-display);
+    transition: all 0.2s;
+}
+
+.wallet-custom-topup input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.wallet-custom-topup input::placeholder {
+    color: var(--text-muted);
+}
+
+.wallet-custom-topup .btn-primary {
+    flex: unset;
+    white-space: nowrap;
+}
+
+.wallet-autorefill {
+    padding: 0.875rem 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.toggle-label input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 11px;
+    flex-shrink: 0;
+    transition: background 0.25s;
+}
+
+.toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.25s;
+}
+
+.toggle-label input[type="checkbox"]:checked + .toggle-switch {
+    background: var(--gradient-primary);
+}
+
+.toggle-label input[type="checkbox"]:checked + .toggle-switch::after {
+    transform: translateX(18px);
+}
+
+/* Transaction History */
+.wallet-transactions-section {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.wallet-transactions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+}
+
+.wallet-transactions-header .wallet-section-title {
+    margin-bottom: 0;
+}
+
+.wallet-tx-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.wallet-tx-item {
+    display: grid;
+    grid-template-columns: 140px 1fr 100px 100px;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.wallet-tx-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.wallet-tx-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.wallet-tx-desc {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.wallet-tx-tokens {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: right;
+    font-family: var(--font-mono);
+}
+
+.wallet-tx-amount {
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-align: right;
+    font-family: var(--font-mono);
+}
+
+.wallet-tx-amount.credit {
+    color: var(--accent-success);
+}
+
+.wallet-tx-amount.debit {
+    color: #ff4444;
+}
+
+/* ============================================
+   RESPONSIVE (CRM + Wallet)
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .crm-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .crm-main {
+        grid-template-columns: 1fr;
+    }
+
+    .wallet-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .wallet-main {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .crm-stats,
+    .wallet-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .crm-filters {
+        flex-wrap: wrap;
+    }
+
+    .wallet-topup-packages {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .wallet-tx-item {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
