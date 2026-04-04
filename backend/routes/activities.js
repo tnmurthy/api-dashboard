@@ -83,7 +83,6 @@ router.post(
         const dId = dealId    || ("0x" + "0".repeat(64));
 
         onChainResult = await blockchain.logActivity(orgId, cId, dId, payload, activityTypeNum);
-        await db.createActivity(orgId, {}); // no-op; just to get the reference
       } catch (bcErr) {
         console.warn("ActivityLedger on-chain log failed (non-fatal):", bcErr.message);
       }

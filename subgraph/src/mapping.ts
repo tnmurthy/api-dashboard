@@ -177,7 +177,9 @@ export function handleDealCreated(event: DealCreated): void {
   const deal = new Deal(event.params.dealId.toHexString());
   deal.org        = event.params.orgId.toHexString();
   deal.contact    = event.params.contactId.toHexString();
-  deal.dataHash   = Bytes.fromHexString("0x" + "00".repeat(32));
+  // dataHash is not emitted in DealCreated event; the backend stores it off-chain
+  // and updates via The Graph when available. Use empty bytes32 as placeholder.
+  deal.dataHash   = event.params.dealId; // use dealId as self-referencing placeholder
   deal.assignedTo = event.params.assignedTo;
   deal.createdBy  = event.transaction.from;
   deal.valueWei   = event.params.valueWei;

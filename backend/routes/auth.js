@@ -186,10 +186,21 @@ router.post(
 // ─── Get current user ─────────────────────────────────────────────────────────
 router.get("/me", authenticate, async (req, res, next) => {
   try {
-    let user = await db.getUserByEmail(req.user.userId); // userId might be UUID
-    if (!user) {
-      // fallback: wallet users
-      user = await db.getUserByWallet(req.user.walletAddress || "");
+    // req.user.userId is the UUID from the DB; look up directly by ID
+    const db = require("../services/supabase");
+    const supabase = require("@supabase/supabase-js").createClient(
+      process.env.SUPABASE_URL || "",
+      process.env.SUPABASE_SERVICE_KEY || "",
+      { auth: { persistSession: false } }
+    );
+    let user = null;
+
+    if (req.user.userId) {
+      const { data } = await supabase.from("users").select("*").eq("id", req.user.userId).single();
+      user = data;
+    }
+    if (!user && req.user.walletAddress) {
+      user = await db.getUserByWallet(req.user.walletAddress);
     }
     if (!user) return res.status(404).json({ error: "User not found" });
 

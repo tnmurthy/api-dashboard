@@ -906,7 +906,7 @@ class CRMController {
         if (!name) { alert('Name is required'); return; }
 
         const contact = {
-            id:            crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36),
+            id:            crypto.randomUUID ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2, 9)),
             name,
             email:         document.getElementById('contact-email').value.trim(),
             phone:         document.getElementById('contact-phone').value.trim(),
@@ -1017,7 +1017,7 @@ class CRMController {
         if (!title) { alert('Title is required'); return; }
 
         const deal = {
-            id:         crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36),
+            id:         crypto.randomUUID ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2, 9)),
             title,
             value:      parseFloat(document.getElementById('deal-value').value) || 0,
             stage:      document.getElementById('deal-stage').value,
@@ -1162,7 +1162,7 @@ class CRMController {
         const ICONS = { call:'📞', email:'📧', meeting:'🤝', note:'📝', apiUsage:'⚡', dealUpdate:'📊', custom:'✏️' };
 
         const entry = {
-            id:         crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36),
+            id:         crypto.randomUUID ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2, 9)),
             type,
             icon:       ICONS[type] || '✏️',
             summary,

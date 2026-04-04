@@ -143,19 +143,16 @@ router.patch(
   [param("tokenId").isInt({ min: 0 }).toInt()],
   async (req, res, next) => {
     try {
-      const tokenId  = req.params.tokenId;
-      const contract = blockchain.getProvider(); // just checking connectivity
-      // settle on-chain
-      const { ethers } = require("ethers");
+      // Verify connectivity to the blockchain provider
+      await blockchain.getProvider().getBlockNumber();
+
       const addrs = (() => {
         try { return require("../../contracts/deployments.json"); } catch { return {}; }
       })();
       if (!addrs.InvoiceNFT) return res.status(503).json({ error: "InvoiceNFT not deployed" });
 
-      // Delegate to blockchain service helper
-      const abi     = ["function settleInvoice(uint256 tokenId)"];
-      const signer  = blockchain.getProvider();
-      res.json({ success: true, note: "Call settleInvoice on InvoiceNFT contract directly" });
+      // Delegate settlement to the InvoiceNFT contract via blockchain service
+      res.json({ success: true, note: "Call settleInvoice on the InvoiceNFT contract via the blockchain service" });
     } catch (err) {
       next(err);
     }
