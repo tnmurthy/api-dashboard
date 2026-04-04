@@ -222,7 +222,7 @@
         <!-- CRM View -->
         <div class="view" id="view-crm">
             <div class="crm-container">
-                <!-- CRM Stats -->
+                <!-- Stats Row -->
                 <div class="crm-stats">
                     <div class="stat-card">
                         <div class="stat-label">Total Contacts</div>
@@ -232,72 +232,142 @@
                     <div class="stat-card">
                         <div class="stat-label">Active Leads</div>
                         <div class="stat-value" id="crm-active-leads">0</div>
-                        <div class="stat-trend positive" id="crm-leads-trend">+0%</div>
+                        <div class="stat-trend positive" id="crm-leads-trend">0 active</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Conversion Rate</div>
-                        <div class="stat-value" id="crm-conversion">0%</div>
-                        <div class="stat-subtitle">Leads → Customers</div>
+                        <div class="stat-label">Win Rate</div>
+                        <div class="stat-value" id="crm-win-rate">0%</div>
+                        <div class="stat-subtitle">Closed Won</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-label">Pipeline Value</div>
                         <div class="stat-value">$<span id="crm-pipeline">0</span></div>
-                        <div class="stat-subtitle">Estimated</div>
+                        <div class="stat-subtitle">Open deals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Avg Deal Size</div>
+                        <div class="stat-value">$<span id="crm-avg-deal">0</span></div>
+                        <div class="stat-subtitle">Per contact</div>
                     </div>
                 </div>
 
-                <!-- CRM Main Panel -->
-                <div class="crm-main">
-                    <!-- Add Contact Form -->
-                    <div class="crm-add-section">
-                        <h3 class="crm-section-title">Add Contact</h3>
-                        <div class="crm-add-form">
-                            <input type="text" id="crm-name" placeholder="Full Name" autocomplete="off">
-                            <input type="text" id="crm-company" placeholder="Company" autocomplete="off">
-                            <input type="email" id="crm-email" placeholder="Email" autocomplete="off">
-                            <select id="crm-status">
-                                <option value="lead">Lead</option>
-                                <option value="prospect">Prospect</option>
-                                <option value="customer">Customer</option>
-                                <option value="churned">Churned</option>
-                            </select>
-                            <input type="number" id="crm-value" placeholder="Deal Value ($)" min="0" autocomplete="off">
-                            <button class="btn-primary crm-add-btn" id="crm-add-contact">
-                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                                    <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                </svg>
-                                Add Contact
-                            </button>
+                <!-- Toolbar -->
+                <div class="crm-toolbar">
+                    <div class="crm-toolbar-left">
+                        <div class="crm-search-wrap">
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" class="crm-search-icon">
+                                <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M17 17l-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                            <input type="text" id="crm-search" class="crm-search-input" placeholder="Search by name, company or email…" autocomplete="off">
+                        </div>
+                        <div class="crm-filters">
+                            <button class="crm-filter-btn active" data-filter="all">All</button>
+                            <button class="crm-filter-btn" data-filter="lead">Leads</button>
+                            <button class="crm-filter-btn" data-filter="prospect">Prospects</button>
+                            <button class="crm-filter-btn" data-filter="customer">Customers</button>
+                            <button class="crm-filter-btn" data-filter="churned">Churned</button>
                         </div>
                     </div>
-
-                    <!-- Contact List -->
-                    <div class="crm-list-section">
-                        <div class="crm-list-header">
-                            <h3 class="crm-section-title">Contacts</h3>
-                            <div class="crm-filters">
-                                <button class="crm-filter-btn active" data-filter="all">All</button>
-                                <button class="crm-filter-btn" data-filter="lead">Leads</button>
-                                <button class="crm-filter-btn" data-filter="prospect">Prospects</button>
-                                <button class="crm-filter-btn" data-filter="customer">Customers</button>
-                            </div>
+                    <div class="crm-toolbar-right">
+                        <div class="crm-view-toggle">
+                            <button class="crm-view-btn active" id="crm-view-table" title="Table View">
+                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="2.5" rx="1" fill="currentColor"/><rect x="2" y="8.75" width="16" height="2.5" rx="1" fill="currentColor" opacity="0.7"/><rect x="2" y="13.5" width="16" height="2.5" rx="1" fill="currentColor" opacity="0.5"/></svg>
+                            </button>
+                            <button class="crm-view-btn" id="crm-view-kanban" title="Kanban View">
+                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><rect x="1" y="2" width="5" height="16" rx="1.5" fill="currentColor" opacity="0.9"/><rect x="7.5" y="2" width="5" height="12" rx="1.5" fill="currentColor" opacity="0.7"/><rect x="14" y="2" width="5" height="8" rx="1.5" fill="currentColor" opacity="0.5"/></svg>
+                            </button>
                         </div>
-                        <div class="crm-table-wrapper">
-                            <table class="crm-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Company</th>
-                                        <th>Email</th>
-                                        <th>Status</th>
-                                        <th>Value</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="crm-contacts-tbody">
-                                    <!-- Populated by JS -->
-                                </tbody>
-                            </table>
+                        <label class="btn-secondary btn-sm crm-import-label" title="Import contacts from CSV">
+                            <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M10 2v12M5 9l5 5 5-5M3 16h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Import CSV
+                            <input type="file" id="crm-import-file" accept=".csv" style="display:none">
+                        </label>
+                        <button class="btn-secondary btn-sm" id="crm-export-btn">
+                            <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M17.5 12.5V15.8333C17.5 16.2754 17.3244 16.6993 17.0118 17.0118C16.6993 17.3244 16.2754 17.5 15.8333 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V12.5M14.1667 6.66667L10 2.5M10 2.5L5.83333 6.66667M10 2.5V12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Export
+                        </button>
+                        <button class="btn-primary btn-sm" id="crm-open-add">
+                            <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                            Add Contact
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bulk Actions Bar -->
+                <div class="crm-bulk-bar" id="crm-bulk-bar">
+                    <span id="crm-selected-count">0 selected</span>
+                    <div class="crm-bulk-actions">
+                        <select id="crm-bulk-status" class="crm-bulk-select">
+                            <option value="">Change Status…</option>
+                            <option value="lead">Lead</option>
+                            <option value="prospect">Prospect</option>
+                            <option value="customer">Customer</option>
+                            <option value="churned">Churned</option>
+                        </select>
+                        <button class="btn-secondary btn-sm" id="crm-bulk-apply">Apply</button>
+                        <button class="crm-bulk-delete-btn" id="crm-bulk-delete">
+                            <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M7 4V2h6v2M3 4h14M5 4l1 12h8l1-12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Delete Selected
+                        </button>
+                        <button class="btn-secondary btn-sm" id="crm-bulk-cancel">Deselect All</button>
+                    </div>
+                </div>
+
+                <!-- TABLE VIEW -->
+                <div id="crm-table-view">
+                    <div class="crm-table-wrapper">
+                        <table class="crm-table">
+                            <thead>
+                                <tr>
+                                    <th class="crm-th-check"><input type="checkbox" id="crm-select-all" title="Select all"></th>
+                                    <th class="crm-th-sortable" data-sort="name">Name <span class="sort-arrow"></span></th>
+                                    <th class="crm-th-sortable" data-sort="company">Company <span class="sort-arrow"></span></th>
+                                    <th>Email / Phone</th>
+                                    <th class="crm-th-sortable" data-sort="status">Status <span class="sort-arrow"></span></th>
+                                    <th>Priority</th>
+                                    <th class="crm-th-sortable" data-sort="value">Value <span class="sort-arrow"></span></th>
+                                    <th class="crm-th-sortable" data-sort="lastContacted">Last Contact <span class="sort-arrow"></span></th>
+                                    <th>Tags</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="crm-contacts-tbody"></tbody>
+                        </table>
+                    </div>
+                    <div class="crm-pagination" id="crm-pagination"></div>
+                </div>
+
+                <!-- KANBAN VIEW -->
+                <div id="crm-kanban-view" style="display:none">
+                    <div class="kanban-board">
+                        <div class="kanban-column">
+                            <div class="kanban-col-header lead">
+                                <span class="kanban-col-title">Leads</span>
+                                <span class="kanban-col-count" id="kanban-count-lead">0</span>
+                            </div>
+                            <div class="kanban-cards" id="kanban-lead"></div>
+                        </div>
+                        <div class="kanban-column">
+                            <div class="kanban-col-header prospect">
+                                <span class="kanban-col-title">Prospects</span>
+                                <span class="kanban-col-count" id="kanban-count-prospect">0</span>
+                            </div>
+                            <div class="kanban-cards" id="kanban-prospect"></div>
+                        </div>
+                        <div class="kanban-column">
+                            <div class="kanban-col-header customer">
+                                <span class="kanban-col-title">Customers</span>
+                                <span class="kanban-col-count" id="kanban-count-customer">0</span>
+                            </div>
+                            <div class="kanban-cards" id="kanban-customer"></div>
+                        </div>
+                        <div class="kanban-column">
+                            <div class="kanban-col-header churned">
+                                <span class="kanban-col-title">Churned</span>
+                                <span class="kanban-col-count" id="kanban-count-churned">0</span>
+                            </div>
+                            <div class="kanban-cards" id="kanban-churned"></div>
                         </div>
                     </div>
                 </div>
@@ -390,6 +460,105 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CRM Contact Modal -->
+    <div class="crm-modal-overlay" id="crm-modal" style="display:none">
+        <div class="crm-modal">
+            <div class="crm-modal-header">
+                <h2 id="crm-modal-title">Add Contact</h2>
+                <button class="crm-modal-close" id="crm-modal-close">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
+            </div>
+            <div class="crm-modal-tabs">
+                <button class="crm-modal-tab active" data-tab="details">Details</button>
+                <button class="crm-modal-tab" data-tab="notes">Notes</button>
+                <button class="crm-modal-tab" data-tab="tasks">Tasks</button>
+            </div>
+            <div class="crm-modal-body">
+                <!-- Details Tab -->
+                <div class="crm-modal-tab-content active" id="crm-tab-details">
+                    <input type="hidden" id="modal-contact-id">
+                    <div class="crm-form-grid">
+                        <div class="crm-form-group">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" id="modal-name" placeholder="Jane Doe" autocomplete="off">
+                        </div>
+                        <div class="crm-form-group">
+                            <label>Job Title</label>
+                            <input type="text" id="modal-title-field" placeholder="VP of Engineering" autocomplete="off">
+                        </div>
+                        <div class="crm-form-group">
+                            <label>Company</label>
+                            <input type="text" id="modal-company" placeholder="Acme Corp" autocomplete="off">
+                        </div>
+                        <div class="crm-form-group">
+                            <label>Account Owner</label>
+                            <input type="text" id="modal-owner" placeholder="Sales Rep Name" autocomplete="off">
+                        </div>
+                        <div class="crm-form-group">
+                            <label>Email <span class="required">*</span></label>
+                            <input type="email" id="modal-email" placeholder="jane@acme.com" autocomplete="off">
+                        </div>
+                        <div class="crm-form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="modal-phone" placeholder="+1 (555) 000-0000" autocomplete="off">
+                        </div>
+                        <div class="crm-form-group">
+                            <label>Status</label>
+                            <select id="modal-status">
+                                <option value="lead">Lead</option>
+                                <option value="prospect">Prospect</option>
+                                <option value="customer">Customer</option>
+                                <option value="churned">Churned</option>
+                            </select>
+                        </div>
+                        <div class="crm-form-group">
+                            <label>Priority</label>
+                            <select id="modal-priority">
+                                <option value="hot">🔥 Hot</option>
+                                <option value="warm">☀️ Warm</option>
+                                <option value="cold">❄️ Cold</option>
+                            </select>
+                        </div>
+                        <div class="crm-form-group">
+                            <label>Deal Value ($)</label>
+                            <input type="number" id="modal-value" placeholder="0" min="0">
+                        </div>
+                        <div class="crm-form-group">
+                            <label>Last Contacted</label>
+                            <input type="date" id="modal-last-contacted">
+                        </div>
+                        <div class="crm-form-group crm-form-group--full">
+                            <label>Tags <span class="crm-form-hint">(comma separated)</span></label>
+                            <input type="text" id="modal-tags" placeholder="enterprise, saas, fintech" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <!-- Notes Tab -->
+                <div class="crm-modal-tab-content" id="crm-tab-notes">
+                    <div class="crm-notes-add">
+                        <textarea id="modal-note-input" placeholder="Add a note about this contact…" rows="3"></textarea>
+                        <button class="btn-primary btn-sm" id="modal-add-note">Add Note</button>
+                    </div>
+                    <div class="crm-notes-list" id="modal-notes-list"></div>
+                </div>
+                <!-- Tasks Tab -->
+                <div class="crm-modal-tab-content" id="crm-tab-tasks">
+                    <div class="crm-tasks-add">
+                        <input type="text" id="modal-task-input" placeholder="Task description…" autocomplete="off">
+                        <input type="date" id="modal-task-due" title="Due date">
+                        <button class="btn-primary btn-sm" id="modal-add-task">Add Task</button>
+                    </div>
+                    <div class="crm-tasks-list" id="modal-tasks-list"></div>
+                </div>
+            </div>
+            <div class="crm-modal-footer">
+                <button class="btn-secondary" id="crm-modal-cancel">Cancel</button>
+                <button class="btn-primary" id="crm-modal-save">Save Contact</button>
             </div>
         </div>
     </div>
