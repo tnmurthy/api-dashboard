@@ -1,0 +1,136 @@
+specVersion: 0.0.5
+description: CRM Command Center – indexes on-chain CRM events for fast querying
+repository: https://github.com/tnmurthy/api-dashboard
+
+schema:
+  file: ./schema.graphql
+
+dataSources:
+  - kind: ethereum
+    name: CRMRegistry
+    network: polygon
+    source:
+      address: "0x0000000000000000000000000000000000000000"   # replace after deploy
+      abi: CRMRegistry
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Organization
+        - OrgMember
+      abis:
+        - name: CRMRegistry
+          file: ./abis/CRMRegistry.json
+      eventHandlers:
+        - event: OrgRegistered(indexed bytes32,indexed address,string,uint256)
+          handler: handleOrgRegistered
+        - event: MemberAdded(indexed bytes32,indexed address,uint8)
+          handler: handleMemberAdded
+        - event: MemberRemoved(indexed bytes32,indexed address)
+          handler: handleMemberRemoved
+        - event: OrgDeactivated(indexed bytes32)
+          handler: handleOrgDeactivated
+      file: ./src/mapping.ts
+
+  - kind: ethereum
+    name: ContactBook
+    network: polygon
+    source:
+      address: "0x0000000000000000000000000000000000000000"   # replace after deploy
+      abi: ContactBook
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Contact
+      abis:
+        - name: ContactBook
+          file: ./abis/ContactBook.json
+      eventHandlers:
+        - event: ContactRegistered(indexed bytes32,indexed bytes32,bytes32,address,uint256)
+          handler: handleContactRegistered
+        - event: ContactUpdated(indexed bytes32,indexed bytes32,bytes32,bytes32,uint256)
+          handler: handleContactUpdated
+        - event: ContactDeactivated(indexed bytes32,indexed bytes32,uint256)
+          handler: handleContactDeactivated
+        - event: ConsentGranted(indexed bytes32,indexed bytes32,uint256)
+          handler: handleConsentGranted
+        - event: ConsentRevoked(indexed bytes32,indexed bytes32,uint256)
+          handler: handleConsentRevoked
+      file: ./src/mapping.ts
+
+  - kind: ethereum
+    name: DealPipeline
+    network: polygon
+    source:
+      address: "0x0000000000000000000000000000000000000000"   # replace after deploy
+      abi: DealPipeline
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Deal
+        - DealStageChange
+      abis:
+        - name: DealPipeline
+          file: ./abis/DealPipeline.json
+      eventHandlers:
+        - event: DealCreated(indexed bytes32,indexed bytes32,indexed bytes32,address,uint256,uint8,uint256)
+          handler: handleDealCreated
+        - event: DealStageAdvanced(indexed bytes32,indexed bytes32,uint8,uint8,address,bytes32,uint256)
+          handler: handleDealStageAdvanced
+        - event: DealClosed(indexed bytes32,uint8,uint256)
+          handler: handleDealClosed
+        - event: DealReassigned(indexed bytes32,indexed address,indexed address,uint256)
+          handler: handleDealReassigned
+      file: ./src/mapping.ts
+
+  - kind: ethereum
+    name: ActivityLedger
+    network: polygon
+    source:
+      address: "0x0000000000000000000000000000000000000000"   # replace after deploy
+      abi: ActivityLedger
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - ActivityEntry
+      abis:
+        - name: ActivityLedger
+          file: ./abis/ActivityLedger.json
+      eventHandlers:
+        - event: ActivityLogged(indexed uint256,indexed bytes32,indexed bytes32,bytes32,bytes32,uint8,address,uint256)
+          handler: handleActivityLogged
+      file: ./src/mapping.ts
+
+  - kind: ethereum
+    name: InvoiceNFT
+    network: polygon
+    source:
+      address: "0x0000000000000000000000000000000000000000"   # replace after deploy
+      abi: InvoiceNFT
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Invoice
+      abis:
+        - name: InvoiceNFT
+          file: ./abis/InvoiceNFT.json
+      eventHandlers:
+        - event: InvoiceMinted(indexed uint256,indexed bytes32,indexed address,uint256,uint256,uint256,uint256,bytes32,uint256)
+          handler: handleInvoiceMinted
+        - event: InvoiceSettled(indexed uint256,uint256)
+          handler: handleInvoiceSettled
+      file: ./src/mapping.ts

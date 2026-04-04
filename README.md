@@ -1,4 +1,198 @@
-# API Command Center
+# API Command Center — Blockchain-Backed CRM
+
+> **"One more thing..."** — A revolutionary way to manage your AI infrastructure, now with a full on-chain CRM.
+
+A cinematic, presentation-style dashboard for managing AI APIs **and** a complete CRM whose data layer is immutable and verifiable on-chain. Inspired by OpenRouter meets Salesforce, but trustless.
+
+![Status](https://img.shields.io/badge/Status-Production-success)
+![Version](https://img.shields.io/badge/Version-3.0-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Solidity](https://img.shields.io/badge/Solidity-0.8.24-purple)
+![Hardhat](https://img.shields.io/badge/Hardhat-2.22-yellow)
+
+---
+
+## ✨ What's New in v3 — CRM Layer
+
+### 🏗️ Three-Layer Architecture
+
+```
+Frontend (Vanilla JS + ethers.js CDN)
+        ↕
+Backend API (Node.js / Express + JWT)
+        ├── Off-chain PII → Supabase (PostgreSQL)
+        ├── On-chain hashes → Smart Contracts (Polygon / Base)
+        └── Indexed queries → The Graph
+```
+
+### 📇 CRM Modules
+
+| Module | Description |
+|--------|-------------|
+| **Contacts** | Add contacts with on-chain identity hashing (SHA-256/keccak256 of PII → stored on-chain, PII stays in Supabase) |
+| **Deal Pipeline** | Kanban-style deal board; stage transitions are signed on-chain transactions |
+| **Activity Ledger** | Append-only log of every call, email, and meeting — hashed to chain |
+| **Wallet** | MetaMask connect, Sign-In with Ethereum (SIWE), CRMC token balance, Invoice NFTs |
+
+### ⛓️ Smart Contracts
+
+| Contract | Purpose |
+|----------|---------|
+| `CRMRegistry.sol` | Org registry; maps org → owner wallet; role-based access |
+| `ContactBook.sol` | Stores contact data hashes; GDPR-friendly (only hashes on-chain) |
+| `DealPipeline.sol` | State machine for deals; immutable stage transition log |
+| `ActivityLedger.sol` | Append-only activity log; batch logging for gas efficiency |
+| `UsageToken.sol` | ERC-20 API usage credits; staking + burn-on-usage model |
+| `InvoiceNFT.sol` | ERC-721 proof-of-payment NFTs minted per billing period |
+
+---
+
+## 🚀 Quick Start
+
+### Option A — Docker Compose (full stack, recommended)
+
+```bash
+# 1. Copy env template
+cp backend/.env.example backend/.env
+# 2. Edit backend/.env with your Supabase keys
+# 3. Start everything
+docker-compose up
+```
+
+This starts:
+- Local Hardhat blockchain node on `localhost:8545`
+- Auto-deploys all contracts
+- Backend API on `localhost:3001`
+- Frontend on `localhost:3000`
+
+### Option B — Frontend only (browser demo, no backend)
+
+```bash
+# Open index.html directly in your browser
+open index.html
+```
+
+All CRM features work in demo mode using LocalStorage + browser-side SHA-256 hash simulation.
+
+### Option C — Full production setup
+
+1. **Deploy contracts**
+   ```bash
+   cd contracts
+   npm install
+   npx hardhat run scripts/deploy.js --network polygon
+   # Addresses saved to contracts/deployments.json
+   ```
+
+2. **Configure backend**
+   ```bash
+   cp backend/.env.example backend/.env
+   # Fill in SUPABASE_URL, SUPABASE_SERVICE_KEY, BACKEND_SIGNER_PRIVATE_KEY,
+   # and the deployed contract addresses from deployments.json
+   ```
+
+3. **Start backend**
+   ```bash
+   cd backend && npm install && npm start
+   ```
+
+4. **Deploy The Graph subgraph**
+   ```bash
+   cd subgraph
+   npm install -g @graphprotocol/graph-cli
+   graph init --from-example
+   # Update subgraph.yaml with deployed contract addresses
+   graph deploy --studio crm-command-center
+   ```
+
+---
+
+## 📖 Terminal Commands (extended)
+
+| Command | Description |
+|---------|-------------|
+| `crm contacts` | List all contacts |
+| `crm deals` | Deal pipeline summary by stage |
+| `crm stats` | Full CRM statistics |
+| `wallet status` | Connected wallet address + credit balance |
+| `config <app> --primary <model> --fallback <model>` | Configure AI models |
+| `list apps \| list models` | List apps/models |
+| `help` | All commands |
+
+---
+
+## 🔒 Security & Privacy
+
+- **GDPR-friendly**: PII (name, email) stored in encrypted Supabase. Only `keccak256(canonical_JSON)` stored on-chain.
+- **Non-transferable credits**: `UsageToken` transfers disabled by default (soulbound-lite).
+- **Role-based access**: Owner (1) / Admin (1) / Sales Rep (2) / Read-only (3) enforced in every contract.
+- **Multi-sig intent**: Destructive operations (deactivate contact) require admin role; extend with a multi-sig contract for production.
+- **SIWE**: Sign-In with Ethereum — no passwords sent over the wire for wallet users.
+
+---
+
+## 🗂️ File Structure
+
+```
+api-dashboard/
+├── index.html              # Extended with CRM + Wallet views
+├── styles.css              # Extended with CRM component styles
+├── app.js                  # AppController + CRMController + WalletController
+├── vercel.json
+├── docker-compose.yml      # Full-stack local dev
+│
+├── contracts/              # Solidity smart contracts (Hardhat)
+│   ├── CRMRegistry.sol
+│   ├── ContactBook.sol
+│   ├── DealPipeline.sol
+│   ├── ActivityLedger.sol
+│   ├── UsageToken.sol
+│   ├── InvoiceNFT.sol
+│   ├── hardhat.config.js
+│   ├── scripts/deploy.js
+│   └── test/crm.test.js
+│
+├── backend/                # Node.js / Express API
+│   ├── server.js
+│   ├── middleware/auth.js
+│   ├── services/supabase.js
+│   ├── services/blockchain.js
+│   ├── routes/auth.js
+│   ├── routes/contacts.js
+│   ├── routes/deals.js
+│   ├── routes/activities.js
+│   ├── routes/billing.js
+│   └── .env.example
+│
+└── subgraph/               # The Graph indexing
+    ├── subgraph.yaml
+    ├── schema.graphql
+    └── src/mapping.ts
+```
+
+---
+
+## 🔗 Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Frontend | Vanilla JS, CSS, HTML5, ethers.js (CDN) |
+| Backend | Node.js, Express, JWT, bcrypt |
+| Blockchain | Solidity 0.8.24, Hardhat, OpenZeppelin |
+| Chain | Polygon PoS / Base (EVM-compatible) |
+| Off-chain DB | Supabase (PostgreSQL) |
+| Indexing | The Graph (GraphQL subgraph) |
+| Identity | Sign-In with Ethereum (SIWE / EIP-4361) |
+| Storage | IPFS / Filecoin (for invoice metadata) |
+
+---
+
+## 📄 License
+
+MIT — Feel free to use for personal or commercial projects.
+
+**Built with ❤️ for the AI + Web3 revolution**
+
 
 > **"One more thing..."** - A revolutionary way to manage your AI infrastructure.
 
